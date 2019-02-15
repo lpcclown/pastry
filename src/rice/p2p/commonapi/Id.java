@@ -53,6 +53,8 @@ public interface Id extends Comparable<Id>, Serializable {
 
   //The variable by default is final static in the interface, so we should not add stuff here.
   //public int gpu = 0;
+	
+//  public int gpuInfo();
 
 /**
    * Checks if this Id is between two given ids ccw (inclusive) and cw (exclusive) on the circle

@@ -90,14 +90,20 @@ public class MyScribeClient implements ScribeClient, Application {
    * @param node the PastryNode
    */
   
-  StringBuilder hopInfo = new StringBuilder("");
+  StringBuilder hopInfo = new StringBuilder("");;
+  
+  PastryNode node;
   
   public MyScribeClient(PastryNode node) {
+	  
+	  this.node = node;
 	  
 	System.out.println("This node gpu info is " + node.gpu);
 	  
     // you should recognize this from lesson 3
     this.endpoint = node.buildEndpoint(this, "myinstance");
+    
+    // endpoint.getId().gpuInfo();
 
     // construct Scribe
     myScribe = new ScribeImpl(node,"myScribeInstance");
@@ -159,6 +165,7 @@ public class MyScribeClient implements ScribeClient, Application {
    * Sends an anycast message.
    */
   public void sendAnycast() {
+	hopInfo = new StringBuilder("");
     //System.out.println("Node "+endpoint.getLocalNodeHandle()+" anycasting_test "+seqNum);
 	System.out.println("Node "+endpoint.getLocalNodeHandle()+" cast message "+seqNum + " hopping info:");
     MyScribeContent myMessage = new MyScribeContent(endpoint.getLocalNodeHandle(), seqNum);
@@ -172,15 +179,21 @@ public class MyScribeClient implements ScribeClient, Application {
    * stops the message here.
    */
   public boolean anycast(Topic topic, ScribeContent content) {
-    boolean returnValue = myScribe.getEnvironment().getRandomSource().nextInt(3) == 0;    
-    if (returnValue){
-    	hopInfo.append("+");
-    	hopInfo.append(endpoint.getLocalNodeHandle());
+//  boolean returnValue = myScribe.getEnvironment().getRandomSource().nextInt(3) == 0; 
+	System.out.println("node info = " + endpoint.getLocalNodeHandle()); 
+	System.out.println("node gpu info = " + node.gpu);
+ 	boolean returnValue = node.gpu == 1;  
+    if (!returnValue){
+    	//hopInfo.append("+");
+    	//System.out.println(endpoint.getLocalNodeHandle());
+    	//hopInfo.append(endpoint.getLocalNodeHandle());
     }
     else{
-    	hopInfo.append(" Arrive Target");
+    	System.out.println(" Arrive Target with gpu equal to " + node.gpu);
+    	//hopInfo.append(" Arrive Target with gpu equal to " + node.gpu);
+    	//System.out.println("MyScribeClient.anycast("+ topic +","+ content +"): "+ hopInfo);
     }
-    System.out.println("MyScribeClient.anycast("+ topic +","+ content +"): "+ hopInfo);
+    
     return returnValue;
   }
 
