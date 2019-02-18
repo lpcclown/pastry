@@ -98,7 +98,7 @@ public class MyScribeClient implements ScribeClient, Application {
 	  
 	  this.node = node;
 	  
-	System.out.println("This node gpu info is " + node.gpu);
+	//System.out.println("This node gpu info is " + node.gpu);
 	  
     // you should recognize this from lesson 3
     this.endpoint = node.buildEndpoint(this, "myinstance");
@@ -110,7 +110,8 @@ public class MyScribeClient implements ScribeClient, Application {
 
     // construct the topic
     myTopic = new Topic(new PastryIdFactory(node.getEnvironment()), "example topic");
-    System.out.println("myTopic = "+myTopic);
+    //System.out.println("myTopic = "+myTopic);
+    //[PL0214]Along with topic, there is a message, we need to modify the message instead of topic. 
 
     // now we can receive messages
     endpoint.register();
@@ -167,8 +168,11 @@ public class MyScribeClient implements ScribeClient, Application {
   public void sendAnycast() {
 	hopInfo = new StringBuilder("");
     //System.out.println("Node "+endpoint.getLocalNodeHandle()+" anycasting_test "+seqNum);
-	System.out.println("Node "+endpoint.getLocalNodeHandle()+" cast message "+seqNum + " hopping info:");
-    MyScribeContent myMessage = new MyScribeContent(endpoint.getLocalNodeHandle(), seqNum);
+	//System.out.println("Node "+endpoint.getLocalNodeHandle()+" cast message of container request: " + seqNum + " hopping info:");
+	String resourceRequest = "gpu = 1, Disk = 80";
+	System.out.println("Node "+endpoint.getLocalNodeHandle()+" cast message of container request: " + resourceRequest + " hopping info:");
+    //MyScribeContent myMessage = new MyScribeContent(endpoint.getLocalNodeHandle(), seqNum);
+    MyScribeContent myMessage = new MyScribeContent(endpoint.getLocalNodeHandle(), resourceRequest);
     myScribe.anycast(myTopic, myMessage);
     seqNum++;
   }
@@ -180,16 +184,18 @@ public class MyScribeClient implements ScribeClient, Application {
    */
   public boolean anycast(Topic topic, ScribeContent content) {
 //  boolean returnValue = myScribe.getEnvironment().getRandomSource().nextInt(3) == 0; 
-	System.out.println("node info = " + endpoint.getLocalNodeHandle()); 
+	System.out.println("Hop to node " + endpoint.getLocalNodeHandle()); 
 	System.out.println("node gpu info = " + node.gpu);
- 	boolean returnValue = node.gpu == 1;  
+	System.out.println("node Disk info = " + node.Disk);
+ 	boolean returnValue = (node.gpu == 1 && node.Disk > 80);  
     if (!returnValue){
     	//hopInfo.append("+");
     	//System.out.println(endpoint.getLocalNodeHandle());
     	//hopInfo.append(endpoint.getLocalNodeHandle());
     }
     else{
-    	System.out.println(" Arrive Target with gpu equal to " + node.gpu);
+    	System.out.println("!Arrive Target with gpu equal to " + node.gpu + " Disk equal to " + node.Disk);
+    	System.out.println("!Target node id is " + endpoint.getLocalNodeHandle());
     	//hopInfo.append(" Arrive Target with gpu equal to " + node.gpu);
     	//System.out.println("MyScribeClient.anycast("+ topic +","+ content +"): "+ hopInfo);
     }

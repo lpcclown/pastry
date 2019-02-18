@@ -108,6 +108,7 @@ public class PastryNode extends Observable implements
   public Id myNodeId;
   
   public int gpu = 0;
+  public int Disk = 0;
 
   private Environment myEnvironment;
 

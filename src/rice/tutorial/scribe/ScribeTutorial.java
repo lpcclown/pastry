@@ -86,16 +86,23 @@ public class ScribeTutorial {
       // construct a new node
       PastryNode node = factory.newNode();
       
-      System.out.println("The byte info about its id is " + node.getId().toString());
+      //System.out.println("The byte info about its id is " + node.getId().toString());
       if(node.getId().toString().contains("A")){
     	  node.gpu = 1;
       }
       else
       {
-    	  node.gpu = 0;    	  
+    	  node.gpu = 0;
       }
-      
+      if(node.getId().toString().contains("B")){
+    	  node.Disk = 100;
+      }
+      else
+      {
+    	  node.Disk = 50;
+      }
       System.out.println("The gpu available for the node " + node.gpu); 
+      System.out.println("The disk available for the node " + node.Disk); 
       // construct a new scribe application
       MyScribeClient app = new MyScribeClient(node);
       apps.add(app);
@@ -180,7 +187,7 @@ public class ScribeTutorial {
       s += "  ";
     }
     s += curNode.getId().toString();
-    System.out.println(s);
+    System.out.println("curNode.getId().toString(); " + s);
 
     // recursively print all children
     MyScribeClient app = (MyScribeClient) appTable.get(curNode);

@@ -55,6 +55,8 @@ public class MyScribeContent implements ScribeContent {
    * The sequence number of the content.
    */
   int seq;
+  
+  String request;
 
   /**
    * Simple constructor.  Typically, you would also like some
@@ -68,12 +70,19 @@ public class MyScribeContent implements ScribeContent {
     this.seq = seq;
 //    System.out.println(this+".ctor");
   }
+  
+  //[PL0214]Add the constructor for receive String request, in future, this request can be a request object.
+  public MyScribeContent(NodeHandle from, String request) {
+	    this.from = from;
+	    this.request = request;
+//	    System.out.println(this+".ctor");
+	  }
 
   /**
    * Ye ol' toString()
    */
   public String toString() {
     // return "MyScribeContent #"+seq+" from "+from;
-	  return "Message#"+seq+" hopping on "+from;
+	  return "Message of request: " + request + " hopping on " + from;
   }
 }
